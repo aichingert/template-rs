@@ -1,14 +1,23 @@
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
+use std::fs::{File};
+use std::io::Write;
+
+pub struct Template {
+    file: File,
+    year: String,
+    day: String
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+impl Template {
+    pub fn new(year: String, day: String) -> Self {
+        Self {
+            file: create(&year, &day).unwrap(),
+            year,
+            day
+        }
     }
+}
+
+fn create(year: &String, day: &String) -> std::io::Result<File> {
+    let file = File::create("../aoc-rs/aoc/src/bin/aoc".to_owned() + year + "/" + "aoc" + year + "_" + day + ".rs")?;
+    Ok(file)
 }
