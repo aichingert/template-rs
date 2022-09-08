@@ -1,4 +1,4 @@
-use std::fs::{File};
+use std::fs::{File, read_to_string};
 use std::io::Write;
 
 pub struct Template {
@@ -50,6 +50,55 @@ impl crate::Solution for {name} {{
 }}", &self.year, &self.day)?;
 
         Ok(())
+    }
+
+    pub fn update_mod(&mut self) {
+        let path: String = "../aoc-rs/aoc/src/bin/aoc".to_owned() + &self.year + "/mod.rs";
+        let mut content: Vec<String> = read_to_string(&path)
+            .expect("unable to open file")
+            .lines()
+            .map( | l | l.to_string())
+            .collect();
+        let mut new_line: u8 = 0;
+        let mut file: File = File::create(&path).unwrap();
+        
+        for i in 0..content.len() {
+            if content[i] == "" {
+                new_line += 1;
+            }
+
+            match new_line {
+                2 => {
+                    let element: String = format!("mod aoc{}_{};\r\n", &self.year, &self.day);
+                    content.insert(i, element);
+                },
+                4 => {
+                    let element: String = format!("use aoc{}_{}::*;\r\n", &self.year, &self.day);
+                    content.insert(i, element);
+                },
+                6 => {
+                    let element: String = format!("\tlet mut day_{} = Aoc{}_{}::new();\r\n", &self.day, &self.year, &self.day);
+                    content.insert(i, element);
+                },
+                7 => {
+                    content[i].push_str("\r\n");
+                    content[i + 2].push_str(&format!(", &mut day_{}", &self.day));
+                    new_line += 1;
+                }
+                _ => {
+                    content[i].push_str("\r\n");
+                }
+            }
+        }
+
+        let len = content.len();
+
+        for i in 0..3 {
+            content[len - i - 1].push_str("\r\n");
+        }
+
+        let file_write = content.into_iter().collect::<String>();
+        write!(file, "{file_write}").unwrap();
     }
 }
 
