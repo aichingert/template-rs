@@ -9,6 +9,35 @@ fn main() {
         println!("=================================================\n");
 
         std::process::exit(1);
+    } else {
+        let year: Result<i32, std::num::ParseIntError> = args[1].parse::<i32>();
+        let day: Result<i32, std::num::ParseIntError> = args[2].parse::<i32>();
+
+        match year {
+            Ok(n) => {
+                if n < 2015 || n > 2022 {
+                    println!("Enter a valid year! 2015-2022");
+                    std::process::exit(1);
+                }
+            },
+            Err(_) => {
+                println!("Enter a valid year! 2015-2022");
+                std::process::exit(1);
+            }
+        }
+
+        match day {
+            Ok(n) => {
+                if n < 1 || n > 25 {
+                    println!("Enter a valid day! 1-25");
+                    std::process::exit(1);
+                }
+            },
+            Err(_) => {
+                println!("Enter a valid day! 1-25");
+                std::process::exit(1);
+            }
+        }
     }
 
     let mut template = Template::new(args[1].clone(), args[2].clone());
