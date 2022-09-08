@@ -15,6 +15,42 @@ impl Template {
             day
         }
     }
+    
+    pub fn write_template(&mut self) -> std::io::Result<()> {
+        let name = format!("Aoc{}_{}", &self.year, &self.day);
+
+        write!(self.file, "use aoc::*;
+
+pub struct {name} {{
+    d: Vec<_>
+}}
+        
+impl {name} {{
+    pub fn new() -> Self {{
+        Self {{ d: vec![] }}
+    }}
+}}
+        
+impl crate::Solution for {name} {{
+    fn name(&self) -> (usize, usize) {{
+        ({}, {})
+    }}
+        
+    fn parse(&mut self) {{
+        self.d;
+    }}
+        
+    fn part1(&mut self) -> Vec<String> {{
+        crate::output(\"\")
+    }}
+        
+    fn part2(&mut self) -> Vec<String> {{
+        crate::output(\"\")
+    }}
+}}", &self.year, &self.day)?;
+
+        Ok(())
+    }
 }
 
 fn create(year: &String, day: &String) -> std::io::Result<File> {

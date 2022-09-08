@@ -10,5 +10,5 @@ fn main() {
     }
 
     let mut template = Template::new(args[1].clone(), args[2].clone());
-    
+    template.write_template().expect("couldn't edit file");
 }
