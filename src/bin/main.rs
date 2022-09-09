@@ -4,7 +4,7 @@ use template_rs::*;
 fn main() {
     let args = std::env::args().collect::<Vec<String>>();
 
-    if args.len() < 2 {
+    if args.len() <= 2 {
         println!("Give the year and day when executing the programm");
         println!("=================================================\n");
 
@@ -40,6 +40,12 @@ fn main() {
         }
     }
 
+    if args[2].len() != 2 {
+        println!("Invalid day add 0 at the beginning if day <= 9");
+        println!("==============================================\n");
+        std::process::exit(1);
+    }
+
     let mut template = Template::new(args[1].clone(), args[2].clone());
     println!("Created file aoc{}_{} ==========> [20.00 %]", args[1], args[2]);
 
@@ -52,6 +58,6 @@ fn main() {
     template.add_txt().expect("couldn't create input txt");
     println!("Created input txt =====> [80.0 %]");
 
-    template.update_readme();
+    template.update_readme().expect("couldn't edit/create README.md");
     println!("Added day to README.md => [100.0 %]");
 }

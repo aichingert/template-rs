@@ -99,26 +99,27 @@ impl crate::Solution for {name} {{
             content[len - i - 1].push_str("\r\n");
         }
 
-        let file_write = content.into_iter().collect::<String>();
-        write!(file, "{file_write}")?;
+        let file_content = content.into_iter().collect::<String>();
+        write!(file, "{file_content}")?;
 
         Ok(())
     }
 
     pub fn add_txt(&self) -> std::io::Result<()> {
-        let path: String = format!("../aoc-rs/input/{}/{}.txt", self.year, self.day);
+        let path: String = format!("../aoc-rs/aoc/input/{}/{}.txt", self.year, self.day);
         File::create(path)?;
 
         Ok(())
     }
 
-    pub fn update_readme(&self) {
+    pub fn update_readme(&self) -> std::io::Result<()> {
         let path: String = "../aoc-rs/aoc/src/bin/aoc".to_owned() + &self.year + "/README.md";
         let mut content: Vec<String> = read_to_string(&path)
             .expect("unable to open file")
             .lines()
             .map( | l | l.to_string())
             .collect();
+        let mut file: File = File::create(&path)?;
 
         for i in 0..content.len() {
             content[i].push_str("\r\n");
@@ -127,9 +128,14 @@ impl crate::Solution for {name} {{
         let year: &String = &self.year;
         let day: &String = &self.day;
 
-        let line: String = format!("| {day} | **[name](https://adventofcode.com/{year}/day/{day})** | [day {}](/aoc/src/bin/aoc{year}/aoc{year}_{day}.rs) |\r\n", day[0..=0].to_string().replace("0", " "));
+        let line: String = format!("| {day} | **[name](https://adventofcode.com/{year}/day/{day})** | [day {}](/aoc/src/bin/aoc{year}/aoc{year}_{day}.rs) |\r\n", if &day[0..=0] == "0" { day.replace("0", " ") } else { day.to_string() });
 
         content.push(line);
+
+        let file_content = content.into_iter().collect::<String>();
+        write!(file, "{file_content}")?;
+
+        Ok(())
     }
 }
 
