@@ -18,6 +18,8 @@ impl Template {
     
     pub fn write_template(&mut self) -> std::io::Result<()> {
         let name = format!("Aoc{}_{}", &self.year, &self.day);
+        let year: &String = &self.year;
+        let day: &String = &self.day;
 
         write!(self.file, "use aoc::*;
 
@@ -33,11 +35,11 @@ impl {name} {{
         
 impl crate::Solution for {name} {{
     fn name(&self) -> (usize, usize) {{
-        ({}, {})
+        ({year}, {day})
     }}
         
     fn parse(&mut self) {{
-        self.d;
+        self.d = x(\"input/{year}/{day}.txt\");
     }}
         
     fn part1(&mut self) -> Vec<String> {{
@@ -47,12 +49,12 @@ impl crate::Solution for {name} {{
     fn part2(&mut self) -> Vec<String> {{
         crate::output(\"\")
     }}
-}}", &self.year, &self.day)?;
+}}")?;
 
         Ok(())
     }
 
-    pub fn update_mod(&mut self) {
+    pub fn update_mod(&mut self) -> std::io::Result<()> {
         let path: String = "../aoc-rs/aoc/src/bin/aoc".to_owned() + &self.year + "/mod.rs";
         let mut content: Vec<String> = read_to_string(&path)
             .expect("unable to open file")
@@ -60,7 +62,7 @@ impl crate::Solution for {name} {{
             .map( | l | l.to_string())
             .collect();
         let mut new_line: u8 = 0;
-        let mut file: File = File::create(&path).unwrap();
+        let mut file: File = File::create(&path)?;
         
         for i in 0..content.len() {
             if content[i] == "" {
@@ -98,7 +100,16 @@ impl crate::Solution for {name} {{
         }
 
         let file_write = content.into_iter().collect::<String>();
-        write!(file, "{file_write}").unwrap();
+        write!(file, "{file_write}")?;
+
+        Ok(())
+    }
+
+    pub fn add_txt(&self) -> std::io::Result<()> {
+        let path: String = format!("../aoc-rs/input/{}/{}.txt", self.year, self.day);
+        File::create(path)?;
+
+        Ok(())
     }
 }
 
