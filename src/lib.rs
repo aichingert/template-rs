@@ -111,6 +111,26 @@ impl crate::Solution for {name} {{
 
         Ok(())
     }
+
+    pub fn update_readme(&self) {
+        let path: String = "../aoc-rs/aoc/src/bin/aoc".to_owned() + &self.year + "/README.md";
+        let mut content: Vec<String> = read_to_string(&path)
+            .expect("unable to open file")
+            .lines()
+            .map( | l | l.to_string())
+            .collect();
+
+        for i in 0..content.len() {
+            content[i].push_str("\r\n");
+        }
+
+        let year: &String = &self.year;
+        let day: &String = &self.day;
+
+        let line: String = format!("| {day} | **[name](https://adventofcode.com/{year}/day/{day})** | [day {}](/aoc/src/bin/aoc{year}/aoc{year}_{day}.rs) |\r\n", day[0..=0].to_string().replace("0", " "));
+
+        content.push(line);
+    }
 }
 
 fn create(year: &String, day: &String) -> std::io::Result<File> {

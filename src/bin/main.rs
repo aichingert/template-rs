@@ -41,14 +41,17 @@ fn main() {
     }
 
     let mut template = Template::new(args[1].clone(), args[2].clone());
-    println!("Created file aoc{}_{} ==========> [25.00 %]", args[1], args[2]);
+    println!("Created file aoc{}_{} ==========> [20.00 %]", args[1], args[2]);
 
     template.write_template().expect("couldn't edit file");
-    println!("Added content to file ============> [50.00 %]");
+    println!("Added content to file ============> [40.00 %]");
 
     template.update_mod().expect("couldn't edit mod.rs");
-    println!("Added day to mod.rs - finished ===> [75.00 %]");
+    println!("Added day to mod.rs - finished ===> [60.00 %]");
 
     template.add_txt().expect("couldn't create input txt");
-    println!("Successfully made input txt ======> [100.0 %]");
+    println!("Created input txt =====> [80.0 %]");
+
+    template.update_readme();
+    println!("Added day to README.md => [100.0 %]");
 }
