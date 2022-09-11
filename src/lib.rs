@@ -127,8 +127,9 @@ impl crate::Solution for {name} {{
 
         let year: &String = &self.year;
         let day: &String = &self.day;
+        let check = if &day[0..=0] == "0" { day.replace("0", " ") } else { day.to_string() };
 
-        let line: String = format!("| {day} | **[name](https://adventofcode.com/{year}/day/{day})** | [day {}](/aoc/src/bin/aoc{year}/aoc{year}_{day}.rs) |\r\n", if &day[0..=0] == "0" { day.replace("0", " ") } else { day.to_string() });
+        let line: String = format!("| {} | **[name](https://adventofcode.com/{year}/day/{day})** | [day {}](/aoc/src/bin/aoc{year}/aoc{year}_{day}.rs) |\r\n", check, check);
 
         content.push(line);
 
