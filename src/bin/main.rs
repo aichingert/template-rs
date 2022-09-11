@@ -56,8 +56,8 @@ fn main() {
     println!("Added day to mod.rs - finished ===> [60.00 %]");
 
     template.add_txt().expect("couldn't create input txt");
-    println!("Created input txt =====> [80.0 %]");
+    println!("Created input txt ================> [80.00 %]");
 
     template.update_readme().expect("couldn't edit/create README.md");
-    println!("Added day to README.md => [100.0 %]");
+    println!("Added day to README.md ===========> [100.0 %]");
 }
