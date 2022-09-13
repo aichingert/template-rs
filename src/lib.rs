@@ -1,5 +1,22 @@
 use std::fs::{File, read_to_string};
 use std::io::Write;
+use std::fmt;
+
+pub struct FileExistsError {
+    path: String
+}
+
+impl fmt::Display for FileExistsError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "The file [\"{}\"] already exists", self.path)
+    }
+}
+
+impl fmt::Debug for FileExistsError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{{ file: {}, line: {} }}", file!(), line!()) 
+    }
+}
 
 pub struct Template {
     file: File,
@@ -105,9 +122,16 @@ impl crate::Solution for {name} {{
         Ok(())
     }
 
-    pub fn add_txt(&self) -> std::io::Result<()> {
+    pub fn add_txt(&self) -> Result<(), FileExistsError> {
         let path: String = format!("../aoc-rs/aoc/input/{}/{}.txt", self.year, self.day);
-        File::create(path)?;
+        
+        if std::path::Path::new(&path).exists() {
+            return Err(FileExistsError {
+                path
+            })
+        }
+
+        File::create(path).expect("unable to create file");
 
         Ok(())
     }
