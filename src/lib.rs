@@ -38,10 +38,8 @@ impl Template {
         let year: &String = &self.year;
         let day: &String = &self.day;
 
-        write!(self.file, "use aoc::*;
-
-pub struct {name} {{
-    d: Vec<_>
+        write!(self.file, "pub struct {name} {{
+    d: Vec<i32>
 }}
         
 impl {name} {{
@@ -56,7 +54,7 @@ impl crate::Solution for {name} {{
     }}
         
     fn parse(&mut self) {{
-        self.d = x(\"input/{year}/{day}.txt\");
+        self.d = aoc::(\"input/{year}/{day}.txt\");
     }}
         
     fn part1(&mut self) -> Vec<String> {{
