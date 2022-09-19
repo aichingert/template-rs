@@ -1,5 +1,5 @@
 use template_rs::*;
-
+use std::path::Path;
 
 fn main() {
     let args = std::env::args().collect::<Vec<String>>();
@@ -43,6 +43,13 @@ fn main() {
     if args[2].len() != 2 {
         println!("Invalid day add 0 at the beginning if day <= 9");
         println!("==============================================\n");
+        std::process::exit(1);
+    }
+
+    let path: String = format!("../aoc-rs/aoc/src/bin/aoc{}/aoc{}_{}.rs", &args[1], &args[1], &args[2]);
+
+    if Path::exists(Path::new(&path)) {
+        println!("File already exists: aoc{}_{}.rs",&args[1], &args[2]);
         std::process::exit(1);
     }
 
