@@ -135,7 +135,7 @@ impl crate::Solution for {name} {{
     }
 
     pub fn update_readme(&self) -> std::io::Result<()> {
-        let path: String = "../aoc-rs/aoc/src/bin/aoc".to_owned() + &self.year + "/README.md";
+        let mut path: String = "../aoc-rs/aoc/src/bin/aoc".to_owned() + &self.year + "/README.md";
         let mut content: Vec<String> = read_to_string(&path)
             .expect("unable to open file")
             .lines()
@@ -153,11 +153,32 @@ impl crate::Solution for {name} {{
 
         let line: String = format!("| {} | **[name](https://adventofcode.com/{year}/day/{day})** | [day {}](/aoc/src/bin/aoc{year}/aoc{year}_{day}.rs) |\r\n", check, check);
 
+        
         content.push(line);
 
-        let file_content = content.into_iter().collect::<String>();
+        let days: String = (content.len()-3).to_string();
+        let mut file_content = content.into_iter().collect::<String>();
         write!(file, "{file_content}")?;
 
+        path = "../aoc-rs/README.md".to_string();
+        content = read_to_string(&path)
+            .expect("unable to open file")
+            .lines()
+            .map( | l | l.to_string())
+            .collect();
+        file = File::create(&path)?;
+
+        let mut line: Vec<&str> = content[11 - (year.parse::<usize>().unwrap() - 2015) as usize].split(" ").collect();
+        line[4] = &days;
+        content[11 - (year.parse::<usize>().unwrap() - 2015) as usize] = line.into_iter().collect::<String>();
+
+        for i in 0..content.len() {
+            content[i].push_str("\r\n");
+        }
+        
+        file_content =  content.into_iter().collect::<String>();
+        write!(file, "{file_content}")?;
+        
         Ok(())
     }
 }

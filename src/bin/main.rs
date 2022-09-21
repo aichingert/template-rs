@@ -47,9 +47,13 @@ fn main() {
     }
 
     let path: String = format!("../aoc-rs/aoc/src/bin/aoc{}/aoc{}_{}.rs", &args[1], &args[1], &args[2]);
+    let input_path: String = format!("../aoc-rs/input/{}.txt", &args[2]);
 
     if Path::exists(Path::new(&path)) {
         println!("File already exists: aoc{}_{}.rs",&args[1], &args[2]);
+        std::process::exit(1);
+    } else if Path::exists(Path::new(&input_path)) {
+        println!("File already exists: input/{}.txt", &args[2]);
         std::process::exit(1);
     }
 
