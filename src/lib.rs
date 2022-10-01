@@ -32,6 +32,24 @@ impl Template {
             day
         }
     }
+
+    fn sorted_insert(&self, is_added: bool, current_day: i32, day: i32, to_add: String, content: &mut Vec<String>, idx: usize) -> bool {
+        let mut did_add: bool = is_added;
+        
+        if current_day < day && !did_add {
+            content.insert(idx, to_add.clone());
+            did_add = true;
+        } else if current_day == day {
+            did_add = true;
+        }
+        if !did_add && content[idx+1] == "" {
+            content.insert(idx+1, to_add);
+        } else {
+            content[idx].push('\n');
+        }       
+
+        did_add
+    }
     
     pub fn write_template(&mut self) -> std::io::Result<()> {
         let name = format!("Aoc{}_{}", &self.year, &self.day);
@@ -76,34 +94,31 @@ impl crate::Solution for {name} {{
             .lines()
             .map( | l | l.to_string())
             .collect();
-        let mut new_line: u8 = 0;
         let mut file: File = File::create(&path)?;
-        
-        for i in 0..content.len() {
-            if content[i] == "" {
-                new_line += 1;
-            }
+        let current_day: i32 = self.day.parse().unwrap();
+        let mut mod_is_added: bool = false;
+        let mut use_is_added: bool = false;
+        content[0].push('\n');
 
-            match new_line {
-                2 => {
-                    let element: String = format!("mod aoc{}_{};\r\n", &self.year, &self.day);
-                    content.insert(i, element);
+        for i in 1..content.len() {
+            let line: Vec<&str> = content[i].split(' ').collect();
+
+            match line[0] {
+                "mod" => {
+                    let day: i32 = line[1][8..=9].parse::<i32>().unwrap();
+ 
+                    mod_is_added = self.sorted_insert(mod_is_added, current_day, day, format!("mod aoc{}_{};", self.year, self.day), &mut content, i);
                 },
-                4 => {
-                    let element: String = format!("use aoc{}_{}::*;\r\n", &self.year, &self.day);
-                    content.insert(i, element);
+                "use" => {
+                    let day: i32 = line[1][8..=9].parse::<i32>().unwrap();
+
+                    use_is_added = self.sorted_insert(use_is_added, current_day, day, format!("use aoc{}_{}::*;", self.year, self.day), &mut content, i);
                 },
-                6 => {
-                    let element: String = format!("\tlet mut day_{} = Aoc{}_{}::new();\r\n", &self.day, &self.year, &self.day);
-                    content.insert(i, element);
-                },
-                7 => {
-                    content[i].push_str("\r\n");
-                    content[i + 2].push_str(&format!(", &mut day_{}", &self.day));
-                    new_line += 1;
+                "\tlet" => {
+                    println!("{:?}", &content[i]);
                 }
                 _ => {
-                    content[i].push_str("\r\n");
+                    content[i].push('\n');
                 }
             }
         }
