@@ -42,7 +42,9 @@ impl Template {
         } else if current_day == day {
             did_add = true;
         }
+
         if !did_add && content[idx+1] == "" {
+            content[idx].push('\n');
             content.insert(idx+1, to_add);
         } else {
             content[idx].push('\n');
@@ -98,6 +100,8 @@ impl crate::Solution for {name} {{
         let current_day: i32 = self.day.parse().unwrap();
         let mut mod_is_added: bool = false;
         let mut use_is_added: bool = false;
+        let mut new_is_added: bool = false;
+        let mut idx: usize = 0;
         content[0].push('\n');
 
         for i in 1..content.len() {
@@ -114,12 +118,33 @@ impl crate::Solution for {name} {{
 
                     use_is_added = self.sorted_insert(use_is_added, current_day, day, format!("use aoc{}_{}::*;", self.year, self.day), &mut content, i);
                 },
-                "\tlet" => {
-                    println!("{:?}", &content[i]);
+                "pub" => {
+                    idx = i;
+                    break;
                 }
                 _ => {
                     content[i].push('\n');
                 }
+            }
+        }
+
+        for i in idx..content.len() {
+            let line: Vec<&str> = content[i].split(' ').collect();
+
+            if line.len() > 6 && line[6].len() > 5 {
+                match line[4] {
+                    "let" => {
+                        let day: i32 = line[6][4..=5].parse().unwrap();
+                        new_is_added = self.sorted_insert(new_is_added, current_day, day, format!("    let mut day_{} = Aoc{}_{}::new();", self.day, self. year, self.day), &mut content, i);
+                        println!("{day} {new_is_added}");
+                    }
+                    _ => {
+                        let day: i32 = line[6][4..=5].parse().unwrap();
+                        println!("{day} {new_is_added}");
+                    }
+                }
+            } else {
+                content[i].push('\n');
             }
         }
 
