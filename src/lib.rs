@@ -137,16 +137,17 @@ impl crate::Solution for {name} {{
                         let day: i32 = line[6][4..=5].parse().unwrap();
                         new_is_added = self.sorted_insert(new_is_added, current_day, day, format!("    let mut day_{} = Aoc{}_{}::new();", self.day, self. year, self.day), &mut content, i);
                         println!("{day} {new_is_added}");
-                    }
                     _ => {
                         let day: i32 = line[6][4..=5].parse().unwrap();
                         println!("{day} {new_is_added}");
                     }
+                    }
+                    _ => {}
                 }
             } else {
                 content[i].push('\n');
             }
-        }
+                idx = i + 1;
 
         let len = content.len();
 
@@ -154,6 +155,9 @@ impl crate::Solution for {name} {{
             content[len - i - 1].push_str("\r\n");
         }
 
+        }
+
+            
         let file_content = content.into_iter().collect::<String>();
         write!(file, "{file_content}")?;
 
