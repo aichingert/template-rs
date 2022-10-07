@@ -137,10 +137,6 @@ impl crate::Solution for {name} {{
                         let day: i32 = line[6][4..=5].parse().unwrap();
                         new_is_added = self.sorted_insert(new_is_added, current_day, day, format!("    let mut day_{} = Aoc{}_{}::new();", self.day, self. year, self.day), &mut content, i);
                         println!("{day} {new_is_added}");
-                    _ => {
-                        let day: i32 = line[6][4..=5].parse().unwrap();
-                        println!("{day} {new_is_added}");
-                    }
                     }
                     _ => {}
                 }
