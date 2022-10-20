@@ -100,7 +100,6 @@ impl crate::Solution for {name} {{
         let current_day: i32 = self.day.parse().unwrap();
         let mut mod_is_added: bool = false;
         let mut use_is_added: bool = false;
-        let mut new_is_added: bool = false;
         let mut idx: usize = 0;
         content[0].push('\n');
 
@@ -128,29 +127,10 @@ impl crate::Solution for {name} {{
             }
         }
 
-        for i in idx..content.len() {
-            let line: Vec<&str> = content[i].split(' ').collect();
-
-            if line.len() > 6 && line[6].len() > 5 {
-                match line[4] {
-                    "let" => {
-                        let day: i32 = line[6][4..=5].parse().unwrap();
-                        new_is_added = self.sorted_insert(new_is_added, current_day, day, format!("    let mut day_{} = Aoc{}_{}::new();", self.day, self. year, self.day), &mut content, i);
-                        println!("{day} {new_is_added}");
-                    }
-                    _ => {}
-                }
-            } else {
-                content[i].push('\n');
-            }
-                idx = i + 1;
-
         let len = content.len();
 
-        for i in 0..3 {
-            content[len - i - 1].push_str("\r\n");
-        }
-
+        for i in idx..len {
+            content[i].push_str("\n");
         }
 
             
@@ -192,7 +172,6 @@ impl crate::Solution for {name} {{
         let check = if &day[0..=0] == "0" { day.replace("0", " ") } else { day.to_string() };
 
         let line: String = format!("| {} | **[name](https://adventofcode.com/{year}/day/{day})** | [day {}](/aoc/src/bin/aoc{year}/aoc{year}_{day}.rs) |\r\n", check, check);
-
         
         content.push(line);
 
