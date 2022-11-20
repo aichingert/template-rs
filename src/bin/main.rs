@@ -8,7 +8,7 @@ fn main() {
         println!("Give the year and day when executing the programm");
         println!("=================================================\n");
 
-        std::process::exit(1);
+        std::process::exit(0);
     } else {
         let year: Result<i32, std::num::ParseIntError> = args[1].parse::<i32>();
         let day: Result<i32, std::num::ParseIntError> = args[2].parse::<i32>();
@@ -47,14 +47,10 @@ fn main() {
     }
 
     let path: String = format!("../aoc-rs/aoc/src/bin/aoc{}/aoc{}_{}.rs", &args[1], &args[1], &args[2]);
-    let input_path: String = format!("../aoc-rs/input/{}.txt", &args[2]);
 
     if Path::exists(Path::new(&path)) {
         println!("File already exists: aoc{}_{}.rs",&args[1], &args[2]);
-        std::process::exit(1);
-    } else if Path::exists(Path::new(&input_path)) {
-        println!("File already exists: input/{}.txt", &args[2]);
-        std::process::exit(1);
+        std::process::exit(0);
     }
 
     let mut template = Template::new(args[1].clone(), args[2].clone());
@@ -66,8 +62,15 @@ fn main() {
     template.update_mod().expect("couldn't edit mod.rs");
     println!("Added day to mod.rs - finished ===> [60.00 %]");
 
-    template.add_txt().expect("couldn't create input txt");
-    println!("Created input txt ================> [80.00 %]");
+    match template.add_txt() {
+        Ok(()) => {
+            println!("Created input txt ================> [80.00 %]");
+        }
+        Err(err) => {
+            println!("\n{}\n", err);
+            println!("Input txt already exists =========> [80.00 %]");
+        }
+    }
 
     template.update_readme().expect("couldn't edit/create README.md");
     println!("Added day to README.md ===========> [100.0 %]");

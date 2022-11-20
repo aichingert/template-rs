@@ -188,6 +188,8 @@ impl crate::Solution for {name} {{
         file = File::create(&path)?;
 
         let mut line: Vec<&str> = content[11 - (year.parse::<usize>().unwrap() - 2015) as usize].split(" ").collect();
+
+        println!("{:?}", line);
         line[4] = &days;
         content[11 - (year.parse::<usize>().unwrap() - 2015) as usize] = line.into_iter().collect::<String>();
 
