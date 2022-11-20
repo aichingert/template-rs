@@ -176,6 +176,7 @@ impl crate::Solution for {name} {{
         content.push(line);
 
         let days: String = (content.len()-3).to_string();
+        let solved: &String = &format!(" {days} ");
         let mut file_content = content.into_iter().collect::<String>();
         write!(file, "{file_content}")?;
 
@@ -188,9 +189,7 @@ impl crate::Solution for {name} {{
         file = File::create(&path)?;
 
         let mut line: Vec<&str> = content[11 - (year.parse::<usize>().unwrap() - 2015) as usize].split(" ").collect();
-
-        println!("{:?}", line);
-        line[4] = &days;
+        line[1] = solved;
         content[11 - (year.parse::<usize>().unwrap() - 2015) as usize] = line.into_iter().collect::<String>();
 
         for i in 0..content.len() {
