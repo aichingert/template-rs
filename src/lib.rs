@@ -164,7 +164,7 @@ impl crate::Solution for {name} {{
         let mut file: File = File::create(&path)?;
 
         for i in 0..content.len() {
-            content[i].push_str("\r\n");
+            content[i].push_str("\n");
         }
 
         let year: &String = &self.year;
@@ -193,7 +193,7 @@ impl crate::Solution for {name} {{
         content[11 - (year.parse::<usize>().unwrap() - 2015) as usize] = line.into_iter().collect::<String>();
 
         for i in 0..content.len() {
-            content[i].push_str("\r\n");
+            content[i].push_str("\n");
         }
         
         file_content =  content.into_iter().collect::<String>();
