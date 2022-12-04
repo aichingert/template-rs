@@ -188,7 +188,7 @@ impl crate::Solution for {name} {{
             .collect();
         file = File::create(&path)?;
 
-        let mut line: Vec<&str> = content[11 - (year.parse::<usize>().unwrap() - 2015) as usize].split(" ").collect();
+        let mut line: Vec<&str> = content[12 - (year.parse::<usize>().unwrap() - 2015) as usize].split(" ").collect();
         line[1] = solved;
         content[11 - (year.parse::<usize>().unwrap() - 2015) as usize] = line.into_iter().collect::<String>();
 
